@@ -1,0 +1,136 @@
+<html>
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        
+        <script src="scripts.js"></script>
+
+        <style>
+            .tooltip-text {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="flex justify-between pt-5 pb-5 bg-white border-b dark:bg-gray-800 dark:border-gray-700 w-full">
+            <div class="m-3">
+                <h1 class="text-[24px] text-white">OMDb API</h1>
+            </div>
+            <div class="flex">
+                <div class="m-3">
+                <input type="text" id="getTitle" class="shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light [.validated_&]:invalid:border-pink-600 [.validated_&]:invalid:ring-2 [.validated_&]:invalid:ring-pink-200" placeholder="Title" required/>
+                <p id="warning" class="mt-2 hidden [.validated_&]:peer-invalid:block text-pink-600">
+                    Please provide a title!
+                </p>
+                </div>
+                <div class="m-3">
+                    <select id="getType" class="shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                        <option value="movie">Movie</option>
+                        <option value="series">Series</option>
+                        <option value="episode">Episode</option>
+                    </select>
+                </div>
+                <button onclick="fetchMovie()" class="h-[42px] m-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search movie</button>
+            
+            </div>    
+        </div>
+        
+
+        <div class="relative border-t-[1px] border-gray-400">
+
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 text-center">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Title</th>
+                        <th scope="col" class="px-6 py-3">Year</th>
+                        <th scope="col" class="px-6 py-3">Released</th>
+                        <th scope="col" class="px-6 py-3">Runtime</th>
+                        <th scope="col" class="px-6 py-3">Actors</th>
+                        <th scope="col" class="px-6 py-3">Awards</th>
+                        <th scope="col" class="px-6 py-3">Country</th>
+                        <th scope="col" class="px-6 py-3">Director</th>
+                        <th scope="col" class="px-6 py-3">Genre</th>
+                        <th scope="col" class="px-6 py-3">Language</th>
+                        <th scope="col" class="px-6 py-3">Metascore</th>
+                        <th scope="col" class="px-6 py-3">Plot</th>
+                        <th scope="col" class="px-6 py-3">Poster</th>
+                        <th scope="col" class="px-6 py-3">Production</th>
+                        <th scope="col" class="px-6 py-3">Ratings</th>
+                        <th scope="col" class="px-6 py-3">Type</th>
+                        <th scope="col" class="px-6 py-3">Writer</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" id="title" class="text-wrap max-w-[200px] w-full px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"></th>
+                    <td id="year" class="px-6 py-4"></td>
+                    <td id="released" class="px-6 py-4"></td>
+                    <td id="runtime" class="px-6 py-4"></td>
+                    <td class="px-6 py-4">
+                        <button data-tooltip-target="tooltip-actors" data-tooltip-placement="top" type="button" >
+                            <span id="actors" class="tooltip-text"></span>
+                        </button>
+
+                        <div id="tooltip-actors" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            <span id="actorsAll"></span>
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4" style="clear: both;">
+                        <button data-tooltip-target="tooltip-awards" data-tooltip-placement="top" type="button" >
+                            <span id="awards" class="tooltip-text"></span>
+                        </button>
+
+                        <div id="tooltip-awards" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            <span id="awardsAll"></span>
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </td>
+                    <td id="country" class="px-6 py-4"></td>
+                    <td id="director" class="px-6 py-4"></td>
+                    <td id="genre" class="px-6 py-4"></td>
+                    <td id="language" class="px-6 py-4"></td>
+                    <td id="metascore" class="px-6 py-4"></td>
+                    <td class="px-6 py-4">
+                        <button data-tooltip-target="tooltip-plot" data-tooltip-placement="top" type="button" >
+                            <span id="plot" class="tooltip-text"></span>
+                        </button>
+
+                        <div id="tooltip-plot" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700 max-w-[300px] w-full">
+                            <span id="plotAll" class="text-wrap max-w-[200px] w-full"></span>
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </td>
+                    <td id="poster" class="px-6 py-4"></td>
+                    <td id="production" class="px-6 py-4"></td>
+                    <td class="px-6 py-4">
+                        <button id="showRatings" data-tooltip-target="tooltip-ratings" data-tooltip-placement="top" type="button" class="hidden" >
+                            Show ratings
+                        </button>
+
+                        <div id="tooltip-ratings" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                            <span id="ratings"></span>
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </td>
+                    <td id="type" class="px-6 py-4"></td>
+                    <td id="writer" class="px-6 py-4"></td>
+                </tbody>
+                
+            </table>
+
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    </body>
+
+</html>
